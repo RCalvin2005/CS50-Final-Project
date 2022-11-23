@@ -10,7 +10,7 @@ It can and will be upgraded sometime in the future to include other sections, su
 st
 
 ## ! Disclaimer:
-This is an unofficial web app for education purposes; I am not directly affliated to nor does this web app represent PT. Cahaya Walet Jaya. I am only using it as an example and frame such my database may reflect those used in actual industry. Any and all data used are random data used as filler for testing purposes and are not actual data from PT. Cahaya Walet Jaya.
+This is an unofficial web app for education purposes; I am not directly affiliated to nor does this web app represent PT. Cahaya Walet Jaya. I am only using it as an example and frame such my database may reflect those used in actual industry. Any and all data used are random data used as filler for testing purposes and are not actual data from PT. Cahaya Walet Jaya.
 
 
 ## Overview:
