@@ -1,5 +1,6 @@
 # Cahaya Walet Jaya Management System
-#### Video Demo:
+
+#### Video Demo: https://youtu.be/0kwHRVprxgk
 
 #### Description:
 A simple management system for PT. Cahaya Walet Jaya (where my father works) implemented as a web app using Flask. As of now, the management system only handles purchases, and is akin to a glorified Microsoft Excel or Google Sheets. Its main functions are the storing of purchase data, displaying them with the option of filtering and/or sorting them, editing of previous entries and summarising the data based on certain categories.
@@ -120,3 +121,5 @@ When registering a new admin, the account is set up with the *name*, *username* 
 The account hash is generated anew each time the password is set so that the link is one time use.
 
 For security when setting the password, all admin fields are cross-checked with those in the *admins* table so that a person cannot change the password of another account without having the link/account hash of said account.
+
+There is a 60 second cooldown before you can send another email under *Forgot Password*.
