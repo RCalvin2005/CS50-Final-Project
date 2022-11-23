@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block js %}
+    <script src="/static/filter.js"></script>
+    <script src="/static/sort.js"></script>
+{% endblock %}
+
+{% block main %}
+<div class="container d-flex flex-column">
+
+    {% if session['user_id'] %}
+        <div class="align-self-end mb-3">
+            <a class="btn btn-primary" href="/edit_purchase" role="button">Edit</a>
+        </div>
+    {% endif %}
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                {% for column in columns %}
+                    <th class="{{ column['name'] }} text {{ column['align'] }} user-select-none" role="button" onclick="sort(this)">{{ column['label'] }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for column in columns %}
+                    <th>
+                        {% if column['filter'] %}
+                            <input autocomplete="off" class="form-control form-control-sm filter text" name="{{ column['name'] }}" type="text" onkeyup="filter('text')">
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in purchases %}
+                <tr class="align-middle not-hidden">
+                    {% for column in columns %}
+                        {% set field = column['name'] %}
+                        <td class="{{ column['align']}} {{ column['name'] }}">
+                            {{ purchase[field] }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="7">Total:</td>
+                <td class="border-0 fw-bold text-end" id="sum_mass"> {{ total["SUM(mass)"] | two_decimal }} </td>
+                <td class="border-0 fw-bold text-end" id="sum_pieces"> {{ total["SUM(pieces)"] }} </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}

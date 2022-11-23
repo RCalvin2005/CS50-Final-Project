@@ -1,0 +1,11 @@
+<p style="font-size: 1.2em">Hello {{ name }},</p>
+<br>
+<p>You've been registered as an admin for Cahaya Walet Jaya! Your username is <b>{{ username }}</b>.</p>
+<br>
+<p>To activate your account and set your password, please append the following path to the URL.</p>
+<p>/set_password?acc={{ account_hash }}</p>
+<p>Example: http://127.0.0.1:5000/set_password?acc={{ account_hash }}</p>
+<br>
+<p>Thank you for joining us.</p>
+<p>Cahaya Walet Jaya Team</p>
+<span style="opacity: 0"> {{ random }} </span>

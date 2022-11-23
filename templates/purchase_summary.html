@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block js %}
+    <script>
+        window.onload = function() {
+            var totals = document.querySelectorAll(".Total")
+            totals.forEach(td => td.classList.add("fw-bold"))
+        }
+    </script>
+{% endblock %}
+
+{% block main %}
+<div class="container d-flex flex-column">
+
+    {% for color in colors %}
+        {% set color_key = color['key'] %}
+        <h3>{{ color['label'] }}</h3>
+        <table class="table table-hover text-end mb-5">
+            <thead>
+                <tr>
+                    <th></th>
+                    {% for feather in feathers %}
+                        <th>{{ feather }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for shape in shapes %}
+                    <tr class="align-middle">
+                        <th>{{ shape }}</th>
+
+                        {% for feather in feathers %}
+                            <td class="{{ feather }} {{ shape }}">
+                                {{ summary[color_key][shape][feather] | two_decimal }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+</div>
+{% endblock %}

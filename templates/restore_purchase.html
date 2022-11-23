@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Restore Purchases
+{% endblock %}
+
+{% block js %}
+    <script src="/static/filter.js"></script>
+    <script src="/static/sort.js"></script>
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="edit_time text text-start user-select-none" role="button" onclick="sort(this)">Delete Time</th>
+                <th class="username text text-start user-select-none" role="button" onclick="sort(this)">Delete By</th>
+                {% for column in columns %}
+                    <th class="{{ column['name'] }} edit {{ column['align'] }} user-select-none" role="button" onclick="sort(this)">{{ column['label'] }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>
+                    <input autocomplete="off" class="form-control form-control-sm filter edit" name="edit_time" type="text" onkeyup="filter()">
+                </th>
+                <th>
+                    <input autocomplete="off" class="form-control form-control-sm filter edit" name="username" type="text" onkeyup="filter()">
+                </th>
+                {% for column in columns %}
+                    <th>
+                        {% if column['filter'] %}
+                            <input autocomplete="off" class="form-control form-control-sm filter edit" name="{{ column['name'] }}" type="text" onkeyup="filter()">
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in purchases %}
+                <tr class="align-middle not-hidden">
+                    <td class="edit_time">{{ purchase["edit_time"] }}</td>
+                    <td class="username">{{ purchase["username"] }}</td>
+                    <form action="/restore_purchase" method="POST">
+                        {% for column in columns %}
+                            {% set field = column['name'] %}
+                            <td class="px-1">
+                                <input autocomplete="off" class="form-control-plaintext border-0 p-0 m-0 {{ column['name'] }} {{ column['align'] }}" name="{{ column['name'] }}" type="text" value="{{ purchase[field] }}" readonly>
+                            </td>
+                        {% endfor %}
+                        <input type="hidden" name="id" value="{{ purchase['id'] }}">
+                        <td class="border-0">
+                            <button class="btn btn-primary btn-sm" type="submit">Restore</button>
+                        </td>
+                    </form>
+
+                    {% if session['user_id'] == 1 %}
+                        <form action="/permanent_delete" method="POST">
+                            <input type="hidden" name="id" value="{{ purchase['id'] }}">
+                            <td class="border-0">
+                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                            </td>
+                        </form>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+
+        <!-- http://getbootstrap.com/docs/5.2/ -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+        <link href="/static/favicon.ico" rel="icon">
+
+        <title>Final Project: {% block title %}{% endblock %}</title>
+
+        {% block js %}{% endblock %}
+
+    </head>
+
+    <body>
+
+        <nav class="bg-dark navbar navbar-expand-md navbar-dark p-1">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="static/cwj_logo.png" alt="Cahaya Walet Jaya" width="75" height="75">
+                </a>
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        {% if session["user_id"] %}
+                            <li class="nav-item"><a class="nav-link" href="/input_purchase">Input Purchase Data</a></li>
+                        {% endif %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Reports
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/purchase_reports?filter=supplier">Per Supplier</a></li>
+                                <li><a class="dropdown-item" href="/purchase_reports?filter=purchase_code">Per Purchase Code</a></li>
+                                <li><a class="dropdown-item" href="/purchase_reports?filter=shape">Per Shape</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/purchase_summary">Purchase Summary</a></li>
+                        {% if session["user_id"] %}
+                            <li class="nav-item"><a class="nav-link" href="/restore_purchase">Restore Purchase</a></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        {% if session["user_id"] %}
+                            <li class="nav-item"><a class="nav-link" href="/admins">Admins</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <header>
+                    {% for category, message in messages %}
+                        <div class="alert mb-0 text-center {{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </header>
+            {% endif %}
+        {% endwith %}
+
+        <main class="container-fluid py-5 text-center">
+            {% block main %}{% endblock %}
+        </main>
+
+        <footer>
+            <div class="small mb-5 text-center text-muted">
+                This is an unofficial web app for educational purposes and does not represent PT. Cahaya Walet Jaya. Any and all data used are random to be used as filler.
+            </div>
+        </footer>
+
+    </body>
+</html>

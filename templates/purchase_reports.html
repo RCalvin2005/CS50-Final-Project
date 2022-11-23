@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Purchase Reports
+{% endblock %}
+
+{% block js %}
+    <script src="/static/filter.js"></script>
+    <script src="/static/sort.js"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="container d-flex flex-column">
+
+        <div class="mb-3 row align-items-center justify-content-end g-3">
+            <div class="col-auto">
+                <label for="{{ filter }}" class="col-form-label text-end">{{ label }}:</label>
+            </div>
+            <div class="col-auto">
+                <input autocomplete="off" name="{{ filter }}" class="form-control form-control-sm filter text" type="text" onkeyup="filter('text')">
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th class="{{ column['name'] }} text {{ column['align'] }} user-select-none" role="button" onclick="sort(this)">{{ column['label'] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchases %}
+                    <tr class="align-middle not-hidden">
+                        {% for column in columns %}
+                            {% set field = column['name'] %}
+                            <td class="{{ column['align']}} {{ column['name'] }}">
+                                {{ purchase[field] }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="border-0 fw-bold text-end" colspan="7">Total:</td>
+                    <td class="border-0 fw-bold text-end" id="sum_mass"> {{ total["SUM(mass)"] | two_decimal }} </td>
+                    <td class="border-0 fw-bold text-end" id="sum_pieces"> {{ total["SUM(pieces)"] }} </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

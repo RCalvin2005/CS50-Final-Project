@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Admins
+{% endblock %}
+
+{% block js %}
+    <script src="/static/filter.js"></script>
+    <script src="/static/sort.js"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="container d-flex flex-column">
+
+        {% if session['user_id'] == 1 %}
+            <div class="align-self-end mb-3">
+                <a class="btn btn-primary" href="/register_admin" role="button">Register New Admin</a>
+            </div>
+        {% endif %}
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th class="{{ column['name'] }} text {{ column['align'] }} user-select-none" role="button" onclick="sort(this)">{{ column['label'] }}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for column in columns %}
+                        <th>
+                            <input autocomplete="off" class="form-control form-control-sm filter text" name="{{ column['name'] }}" type="text" onkeyup="filter()">
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+
+            <tbody>
+                {% for admin in admins %}
+                    <tr class="align-middle text-start not-hidden">
+                        {% for column in columns %}
+                            {% set field = column['name'] %}
+
+                            {% if field == 'admin_id' %}
+                                <td class="text-center {{ field }} px-3">
+                                    {{ admin[field] | three_digit }}
+                                </td>
+                            {% else %}
+                                <td class="{{ field }} px-3">
+                                    {{ admin[field] }}
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if session['user_id'] == 1 %}
+
+                            {% if admin['admin_id'] != 1 %}
+                                <form action="/delete_admin" method="POST">
+                                    <input type="hidden" name="admin_id" value="{{ admin['admin_id'] }}">
+                                    <td class="border-0">
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </td>
+                                </form>
+                            {% endif %}
+
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

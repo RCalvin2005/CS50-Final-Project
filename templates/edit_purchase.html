@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block js %}
+    <script src="/static/filter.js"></script>
+    <script src="/static/sort.js"></script>
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid d-flex flex-column">
+
+    <div class="align-self-end mb-3">
+        <a class="btn btn-primary" href="/" role="button">Back</a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="edit_time text text-start user-select-none" role="button" onclick="sort(this)">Edit Time</th>
+                <th class="username text text-start user-select-none" role="button" onclick="sort(this)">Edit By</th>
+                {% for column in columns %}
+                    <th class="{{ column['name'] }} edit {{ column['align'] }} user-select-none" role="button" onclick="sort(this)">{{ column['label'] }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>
+                    <input autocomplete="off" class="form-control form-control-sm filter text" name="edit_time" type="text" onkeyup="filter('edit')">
+                </th>
+                <th>
+                    <input autocomplete="off" class="form-control form-control-sm filter text" name="username" type="text" onkeyup="filter('edit')">
+                </th>
+                {% for column in columns %}
+                    <th>
+                        {% if column['filter'] %}
+                            <input autocomplete="off" class="form-control form-control-sm filter edit" name="{{ column['name'] }}" type="text" onkeyup="filter('edit')">
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+
+        <tbody>
+            {% for purchase in purchases %}
+                <tr class="align-middle not-hidden">
+                    <td class="edit_time">{{ purchase["edit_time"] }}</td>
+                    <td class="username">{{ purchase["username"] }}</td>
+                    <form action="/edit_purchase" method="POST">
+                        {% for column in columns %}
+                            {% set field = column['name'] %}
+                            <td class="px-1">
+                                <input autocomplete="off" class="form-control border-0 p-0 m-0 {{ column['name'] }} {{ column['align'] }}" name="{{ column['name'] }}" type="text" value="{{ purchase[field] }}">
+                            </td>
+                        {% endfor %}
+                        <input type="hidden" name="id" value="{{ purchase['id'] }}">
+                        <td class="border-0">
+                            <button class="btn btn-primary btn-sm" type="submit">Confirm</button>
+                        </td>
+                    </form>
+                    <form action="/delete_purchase" method="POST">
+                        <input type="hidden" name="id" value="{{ purchase['id'] }}">
+                        <td class="border-0">
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="9">Total:</td>
+                <td class="border-0 fw-bold text-end" id="sum_mass"> {{ total["SUM(mass)"] | two_decimal }} </td>
+                <td class="border-0 fw-bold text-end" id="sum_pieces"> {{ total["SUM(pieces)"] }} </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}

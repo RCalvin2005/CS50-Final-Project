@@ -1,0 +1,44 @@
+CREATE TABLE purchases (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    date NUMERIC,
+    supplier TEXT,
+    supplier_code TEXT,
+    purchase_code TEXT,
+    shape TEXT,
+    feather TEXT,
+    color TEXT,
+    mass NUMERIC,
+    pieces INTEGER,
+    admin_id INTEGER,
+    edit_time NUMERIC,
+    FOREIGN KEY(admin_id) REFERENCES admins(admin_id));
+
+CREATE UNIQUE INDEX purchase_id ON purchases(id);
+CREATE INDEX categories ON purchases(shape, feather, color);
+
+CREATE TABLE admins (
+    admin_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+    account_hash TEXT NOT NULL);
+
+CREATE UNIQUE INDEX admin_index ON admins(admin_id, username);
+
+CREATE TABLE deleted_purchases (
+    id INTEGER PRIMARY KEY,
+    date NUMERIC,
+    supplier TEXT,
+    supplier_code TEXT,
+    purchase_code TEXT,
+    shape TEXT,
+    feather TEXT,
+    color TEXT,
+    mass NUMERIC,
+    pieces INTEGER,
+    admin_id INTEGER,
+    edit_time NUMERIC,
+    FOREIGN KEY(admin_id) REFERENCES admins(admin_id));
+
+CREATE UNIQUE INDEX deleted_id ON deleted_purchases(id);
